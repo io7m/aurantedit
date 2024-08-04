@@ -17,41 +17,61 @@
 
 package com.io7m.aurantedit.ui.internal.model;
 
-import javafx.application.Platform;
+import java.util.Objects;
 
 /**
- * Close the file.
- *
- * @param state The model state
+ * Replace a metadata value.
  */
 
-public record AEControllerCommandClose(
-  AEModelState state)
+public final class AEControllerCommandMetadataReplace
   implements AEControllerCommandType
 {
+  private final AEMetadata meta;
+  private final AEModelState state;
+  private AEMetadata oldMeta;
+
+  /**
+   * Replace a metadata value.
+   *
+   * @param inState The model state
+   * @param inMeta  The value
+   */
+
+  public AEControllerCommandMetadataReplace(
+    final AEModelState inState,
+    final AEMetadata inMeta)
+  {
+    this.state =
+      Objects.requireNonNull(inState, "state");
+    this.meta =
+      Objects.requireNonNull(inMeta, "newName");
+  }
+
   @Override
   public void execute(
     final AEControllerCommandContextType context)
   {
-    Platform.runLater(this.state::clear);
+    context.putAttribute("Metadata (Name)", this.meta.name());
+    context.putAttribute("Metadata (Value)", this.meta.value());
   }
 
   @Override
   public boolean isUndoable()
   {
-    return false;
+    return true;
   }
 
   @Override
   public void undo(
     final AEControllerCommandContextType context)
   {
-
+    context.putAttribute("Metadata (Name)", this.meta.name());
+    context.putAttribute("Metadata (Value)", this.meta.value());
   }
 
   @Override
   public String describe()
   {
-    return "Close file";
+    return "Replace metadata";
   }
 }

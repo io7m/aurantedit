@@ -17,10 +17,14 @@
 
 package com.io7m.aurantedit.ui;
 
+import com.io7m.aurantedit.ui.internal.AEApplicationEvents;
+import com.io7m.aurantedit.ui.internal.AEApplicationEventsType;
 import com.io7m.aurantedit.ui.internal.AECreateDialogs;
 import com.io7m.aurantedit.ui.internal.AEFileChoosers;
 import com.io7m.aurantedit.ui.internal.AEFileChoosersType;
 import com.io7m.aurantedit.ui.internal.AEFileView;
+import com.io7m.aurantedit.ui.internal.AEFileWindowTracker;
+import com.io7m.aurantedit.ui.internal.AEFileWindowTrackerType;
 import com.io7m.aurantedit.ui.internal.AEMetadataEditDialogs;
 import com.io7m.aurantedit.ui.internal.AENameSetDialogs;
 import com.io7m.aurantedit.ui.internal.AESaveConfirmDialogs;
@@ -110,6 +114,13 @@ public final class AEApplication extends Application
       AECreateDialogs.class, new AECreateDialogs(services));
     services.register(
       AEMetadataEditDialogs.class, new AEMetadataEditDialogs(services));
+    services.register(
+      AEApplicationEventsType.class, AEApplicationEvents.create());
+
+    final var tracker =
+      AEFileWindowTracker.create();
+    services.register(
+      AEFileWindowTrackerType.class, tracker);
 
     final var viewAndStage =
       AEFileView.openForStage(services, stage);

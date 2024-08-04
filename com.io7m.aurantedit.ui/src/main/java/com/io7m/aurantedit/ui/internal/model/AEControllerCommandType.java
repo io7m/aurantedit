@@ -24,10 +24,13 @@ package com.io7m.aurantedit.ui.internal.model;
 public sealed interface AEControllerCommandType
   extends AEControllerExecutableType
   permits AEControllerCommandClipAdd,
+  AEControllerCommandClipDelete,
+  AEControllerCommandClipReplace,
   AEControllerCommandClose,
   AEControllerCommandCreate,
   AEControllerCommandMetadataAdd,
   AEControllerCommandMetadataRemove,
+  AEControllerCommandMetadataReplace,
   AEControllerCommandOpen,
   AEControllerCommandSave,
   AEControllerCommandSaveAs,

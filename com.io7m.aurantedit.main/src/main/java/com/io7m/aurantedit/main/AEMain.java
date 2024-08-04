@@ -48,6 +48,7 @@ public final class AEMain
     final String[] args)
   {
     System.setProperty("org.jooq.no-logo", "true");
+    System.setProperty("org.jooq.no-tips", "true");
 
     final var directoryConfiguration =
       ApplicationDirectoryConfiguration.builder()

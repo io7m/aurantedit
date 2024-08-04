@@ -15,43 +15,21 @@
  */
 
 
-package com.io7m.aurantedit.ui.internal.model;
-
-import javafx.application.Platform;
+package com.io7m.aurantedit.ui.internal;
 
 /**
- * Close the file.
- *
- * @param state The model state
+ * The type of global application events.
  */
 
-public record AEControllerCommandClose(
-  AEModelState state)
-  implements AEControllerCommandType
+public sealed interface AEApplicationEventType
 {
-  @Override
-  public void execute(
-    final AEControllerCommandContextType context)
-  {
-    Platform.runLater(this.state::clear);
-  }
+  /**
+   * Exiting the application was requested.
+   */
 
-  @Override
-  public boolean isUndoable()
-  {
-    return false;
-  }
-
-  @Override
-  public void undo(
-    final AEControllerCommandContextType context)
+  record ExitRequested()
+    implements AEApplicationEventType
   {
 
-  }
-
-  @Override
-  public String describe()
-  {
-    return "Close file";
   }
 }

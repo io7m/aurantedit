@@ -97,6 +97,7 @@ public final class AEDatabaseFactory
     final SQLiteConfig config)
   {
     config.setApplicationId(0x41555245);
+    config.setJournalMode(SQLiteConfig.JournalMode.WAL);
   }
 
   @Override

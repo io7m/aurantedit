@@ -21,6 +21,7 @@ import com.io7m.repetoir.core.RPServiceDirectoryType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.nio.file.Path;
 import java.util.Map;
 
 import static com.io7m.aurantedit.ui.internal.AEStringConstants.AE_SAVE_TITLE;
@@ -30,7 +31,7 @@ import static com.io7m.aurantedit.ui.internal.AEStringConstants.AE_SAVE_TITLE;
  */
 
 public final class AESaveConfirmDialogs
-  extends AEDialogFactoryAbstract<AEUnit, AESaveConfirmView>
+  extends AEDialogFactoryAbstract<Path, AESaveConfirmView>
 {
   /**
    * A version set dialog.
@@ -51,20 +52,20 @@ public final class AESaveConfirmDialogs
 
   @Override
   protected String createStageTitle(
-    final AEUnit arguments)
+    final Path arguments)
   {
     return this.strings().format(AE_SAVE_TITLE);
   }
 
   @Override
   protected AEControllerFactoryType<AEViewType> controllerFactory(
-    final AEUnit arguments,
+    final Path arguments,
     final Stage stage)
   {
     return AEControllerFactoryMapped.create(
       Map.entry(
         AESaveConfirmView.class,
-        () -> new AESaveConfirmView(stage)
+        () -> new AESaveConfirmView(stage, arguments)
       )
     );
   }

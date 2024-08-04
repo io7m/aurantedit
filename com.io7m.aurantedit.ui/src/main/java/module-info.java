@@ -15,6 +15,8 @@
  */
 
 import com.io7m.aurantedit.ui.internal.database.AEDatabaseQueryProviderType;
+import com.io7m.aurantedit.ui.internal.database.AERecentFileAdd;
+import com.io7m.aurantedit.ui.internal.database.AERecentFileList;
 
 /**
  * Aurantium file editor (UI).
@@ -59,6 +61,10 @@ open module com.io7m.aurantedit.ui
   requires org.jooq;
   requires org.slf4j;
   requires org.xerial.sqlitejdbc;
+
+  provides AEDatabaseQueryProviderType
+    with AERecentFileAdd,
+      AERecentFileList;
 
   uses AEDatabaseQueryProviderType;
 

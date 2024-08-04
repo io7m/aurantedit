@@ -18,6 +18,7 @@
 package com.io7m.aurantedit.ui.internal.model;
 
 import com.io7m.aurantedit.ui.internal.AEStringsType;
+import com.io7m.aurantedit.ui.internal.AEUnit;
 import com.io7m.aurantium.api.AUClipDeclaration;
 import com.io7m.aurantium.api.AUClipID;
 import com.io7m.aurantium.api.AUIdentifier;
@@ -28,10 +29,6 @@ import com.io7m.jsamplebuffer.api.SampleBufferType;
 import com.io7m.lanark.core.RDottedName;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,20 +38,22 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Flow;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.SubmissionPublisher;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.io7m.aurantedit.ui.internal.AEStringConstants.AE_EVENT_COMMAND_IN_PROGRESS;
 import static com.io7m.aurantedit.ui.internal.AEStringConstants.AE_EVENT_COMMAND_SUCCEEDED;
+import static com.io7m.aurantedit.ui.internal.AEUnit.UNIT;
 import static com.io7m.aurantedit.ui.internal.model.AEUndoRedo.CLEAR_ALL;
 import static com.io7m.aurantedit.ui.internal.model.AEUndoRedo.REDO;
 import static com.io7m.aurantedit.ui.internal.model.AEUndoRedo.UNDO;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 /**
  * A controller.
@@ -67,17 +66,25 @@ public final class AEController
     LoggerFactory.getLogger(AEController.class);
 
   private final ExecutorService executor;
-  private final LinkedBlockingQueue<AEControllerExecutableType> executorCommandQueue;
-  private final ObservableList<AEControllerCommandType> undoStack;
-  private final ObservableList<AEControllerCommandType> redoStack;
+  private final LinkedBlockingQueue<AEQueueSubmission> executorCommandQueue;
   private final AEStringsType strings;
   private final AtomicBoolean closed;
   private final AEModelState state;
-  private final SimpleObjectProperty<Optional<String>> undoState;
-  private final SimpleObjectProperty<Optional<String>> redoState;
   private final SubmissionPublisher<AEControllerEventType> events;
   private final CloseableCollectionType<IllegalStateException> resources;
   private final ConcurrentHashMap<String, String> attributes;
+  private final AEUndoModel undoModel;
+
+  private record AEQueueSubmission(
+    AEControllerExecutableType executable,
+    CompletableFuture<AEUnit> future)
+  {
+    AEQueueSubmission
+    {
+      Objects.requireNonNull(executable, "executable");
+      Objects.requireNonNull(future, "future");
+    }
+  }
 
   private AEController(
     final AEStringsType inStrings)
@@ -103,36 +110,8 @@ public final class AEController
     this.closed =
       new AtomicBoolean(false);
 
-    this.undoStack =
-      FXCollections.synchronizedObservableList(
-        FXCollections.observableArrayList());
-    this.redoStack =
-      FXCollections.synchronizedObservableList(
-        FXCollections.observableArrayList());
-    this.undoState =
-      new SimpleObjectProperty<>(Optional.empty());
-    this.redoState =
-      new SimpleObjectProperty<>(Optional.empty());
-
-    this.undoStack.addListener(
-      (ListChangeListener<? super AEControllerCommandType>) c -> {
-        try {
-          final var head = this.undoStack.getFirst();
-          this.undoState.set(Optional.of(head.describe()));
-        } catch (final Exception e) {
-          this.undoState.set(Optional.empty());
-        }
-      });
-
-    this.redoStack.addListener(
-      (ListChangeListener<? super AEControllerCommandType>) c -> {
-        try {
-          final var head = this.redoStack.getFirst();
-          this.redoState.set(Optional.of(head.describe()));
-        } catch (final Exception e) {
-          this.redoState.set(Optional.empty());
-        }
-      });
+    this.undoModel =
+      new AEUndoModel();
 
     this.resources =
       CloseableCollection.create(() -> {
@@ -163,22 +142,29 @@ public final class AEController
   {
     while (!this.closed.get()) {
       try {
-        final var executable =
-          this.executorCommandQueue.poll(1L, TimeUnit.SECONDS);
+        final var submission =
+          this.executorCommandQueue.poll(1L, SECONDS);
+
+        if (submission == null) {
+          continue;
+        }
 
         this.attributes.clear();
 
-        switch (executable) {
+        switch (submission.executable()) {
           case final AEControllerCommandType command -> {
             try {
               this.events.submit(this.eventCommandInProgress(command));
               command.execute(this);
               if (command.isUndoable()) {
-                this.undoStack.add(command);
+                this.undoModel.undoAdd(command);
               }
+
+              submission.future.complete(UNIT);
               this.events.submit(this.eventCommandSucceeded(command));
             } catch (final Throwable e) {
               LOG.error("Error: ", e);
+              submission.future.completeExceptionally(e);
               this.events.submit(
                 AEControllerEventFailed.ofException(
                   Map.copyOf(this.attributes),
@@ -190,15 +176,16 @@ public final class AEController
 
           case UNDO -> {
             try {
-              final var command =
-                this.undoStack.removeLast();
-
+              final var command = this.undoModel.undoPop();
               this.events.submit(this.eventCommandInProgress(command));
               command.undo(this);
-              this.redoStack.add(command);
+              this.undoModel.redoAdd(command);
+
+              submission.future.complete(UNIT);
               this.events.submit(this.eventCommandSucceeded(command));
-            } catch (final Exception e) {
+            } catch (final Throwable e) {
               LOG.error("Error: ", e);
+              submission.future.completeExceptionally(e);
               this.events.submit(
                 AEControllerEventFailed.ofException(
                   Map.copyOf(this.attributes),
@@ -210,15 +197,16 @@ public final class AEController
 
           case REDO -> {
             try {
-              final var command =
-                this.redoStack.removeLast();
-
+              final var command = this.undoModel.redoPop();
               this.events.submit(this.eventCommandInProgress(command));
               command.execute(this);
-              this.undoStack.add(command);
+              this.undoModel.undoAdd(command);
+
+              submission.future.complete(UNIT);
               this.events.submit(this.eventCommandSucceeded(command));
-            } catch (final Exception e) {
+            } catch (final Throwable e) {
               LOG.error("Error: ", e);
+              submission.future.completeExceptionally(e);
               this.events.submit(
                 AEControllerEventFailed.ofException(
                   Map.copyOf(this.attributes),
@@ -230,10 +218,11 @@ public final class AEController
 
           case CLEAR_ALL -> {
             try {
-              this.undoStack.clear();
-              this.redoStack.clear();
-            } catch (final Exception e) {
+              this.undoModel.clear();
+              submission.future.complete(UNIT);
+            } catch (final Throwable e) {
               LOG.error("Error: ", e);
+              submission.future.completeExceptionally(e);
               this.events.submit(
                 AEControllerEventFailed.ofException(
                   Map.copyOf(this.attributes),
@@ -241,9 +230,6 @@ public final class AEController
                 )
               );
             }
-          }
-          case null -> {
-
           }
         }
       } catch (final InterruptedException e) {
@@ -272,7 +258,12 @@ public final class AEController
   public void close()
   {
     if (this.closed.compareAndSet(false, true)) {
-      this.executorCommandQueue.add(new AEControllerCommandClose());
+      try {
+        this.enqueue(new AEControllerCommandClose(this.state))
+          .get(1L, SECONDS);
+      } catch (final Exception e) {
+        LOG.debug("Failed to close: ", e);
+      }
       this.resources.close();
     }
   }
@@ -335,23 +326,23 @@ public final class AEController
   }
 
   @Override
-  public void setVersion(
+  public CompletableFuture<AEUnit> setVersion(
     final AUVersion version)
   {
     Objects.requireNonNull(version, "version");
 
-    this.executorCommandQueue.add(
+    return this.enqueue(
       new AEControllerCommandSetVersion(this.state, version)
     );
   }
 
   @Override
-  public void setName(
+  public CompletableFuture<AEUnit> setName(
     final RDottedName name)
   {
     Objects.requireNonNull(name, "name");
 
-    this.executorCommandQueue.add(
+    return this.enqueue(
       new AEControllerCommandSetName(this.state, name)
     );
   }
@@ -359,66 +350,66 @@ public final class AEController
   @Override
   public ReadOnlyObjectProperty<Optional<String>> undoState()
   {
-    return this.undoState;
+    return this.undoModel.undoState();
   }
 
   @Override
   public ReadOnlyObjectProperty<Optional<String>> redoState()
   {
-    return this.redoState;
+    return this.undoModel.redoState();
   }
 
   @Override
-  public void undo()
+  public CompletableFuture<AEUnit> undo()
   {
-    this.executorCommandQueue.add(UNDO);
+    return this.enqueue(UNDO);
   }
 
   @Override
-  public void redo()
+  public CompletableFuture<AEUnit> redo()
   {
-    this.executorCommandQueue.add(REDO);
+    return this.enqueue(REDO);
   }
 
   @Override
-  public void clearUndoStack()
+  public CompletableFuture<AEUnit> clearUndoStack()
   {
-    this.executorCommandQueue.add(CLEAR_ALL);
+    return this.enqueue(CLEAR_ALL);
   }
 
   @Override
-  public void create(
+  public CompletableFuture<AEUnit> create(
     final Path file,
     final AUIdentifier identifier)
   {
     Objects.requireNonNull(file, "file");
     Objects.requireNonNull(identifier, "identifier");
 
-    this.executorCommandQueue.add(
+    return this.enqueue(
       new AEControllerCommandCreate(this.state, identifier, file)
     );
   }
 
   @Override
-  public void open(
+  public CompletableFuture<AEUnit> open(
     final Path file)
   {
     Objects.requireNonNull(file, "file");
 
-    this.executorCommandQueue.add(
+    return this.enqueue(
       new AEControllerCommandOpen(this.state, file)
     );
   }
 
   @Override
-  public void save()
+  public CompletableFuture<AEUnit> save()
   {
     final var outputFile =
       this.file().get().orElseThrow();
     final var outputFileTemp =
       outputFile.resolveSibling(".aurantedit_" + UUID.randomUUID());
 
-    this.executorCommandQueue.add(
+    return this.enqueue(
       new AEControllerCommandSave(
         this.state,
         outputFile,
@@ -428,7 +419,7 @@ public final class AEController
   }
 
   @Override
-  public void saveAs(
+  public CompletableFuture<AEUnit> saveAs(
     final Path path)
   {
     Objects.requireNonNull(path, "path");
@@ -436,7 +427,7 @@ public final class AEController
     final var outputFileTemp =
       path.resolveSibling(".aurantedit_" + UUID.randomUUID());
 
-    this.executorCommandQueue.add(
+    return this.enqueue(
       new AEControllerCommandSaveAs(
         this.state,
         path,
@@ -446,35 +437,70 @@ public final class AEController
   }
 
   @Override
-  public void metadataAdd(
+  public CompletableFuture<AEUnit> metadataAdd(
     final AEMetadata meta)
   {
     Objects.requireNonNull(meta, "meta");
 
-    this.executorCommandQueue.add(
+    return this.enqueue(
       new AEControllerCommandMetadataAdd(this.state, meta)
     );
   }
 
   @Override
-  public void metadataRemove(
+  public CompletableFuture<AEUnit> metadataRemove(
     final AEMetadata meta)
   {
     Objects.requireNonNull(meta, "meta");
 
-    this.executorCommandQueue.add(
+    return this.enqueue(
       new AEControllerCommandMetadataRemove(this.state, meta)
     );
   }
 
   @Override
-  public void clipAdd(
+  public CompletableFuture<AEUnit> metadataReplace(
+    final AEMetadata meta)
+  {
+    Objects.requireNonNull(meta, "meta");
+
+    return this.enqueue(
+      new AEControllerCommandMetadataReplace(this.state, meta)
+    );
+  }
+
+  @Override
+  public CompletableFuture<AEUnit> clipAdd(
     final Path path)
   {
     Objects.requireNonNull(path, "path");
 
-    this.executorCommandQueue.add(
+    return this.enqueue(
       new AEControllerCommandClipAdd(this.state, path)
+    );
+  }
+
+  @Override
+  public CompletableFuture<AEUnit> clipReplace(
+    final AUClipID clipID,
+    final Path path)
+  {
+    Objects.requireNonNull(clipID, "clipID");
+    Objects.requireNonNull(path, "path");
+
+    return this.enqueue(
+      new AEControllerCommandClipReplace(this.state, clipID, path)
+    );
+  }
+
+  @Override
+  public CompletableFuture<AEUnit> clipDelete(
+    final AUClipID clipID)
+  {
+    Objects.requireNonNull(clipID, "clipID");
+
+    return this.enqueue(
+      new AEControllerCommandClipDelete(this.state, clipID)
     );
   }
 
@@ -513,5 +539,13 @@ public final class AEController
     this.events.submit(
       new AEControllerEventInProgress(message, (double) index / (double) count)
     );
+  }
+
+  private CompletableFuture<AEUnit> enqueue(
+    final AEControllerExecutableType executable)
+  {
+    final var future = new CompletableFuture<AEUnit>();
+    this.executorCommandQueue.add(new AEQueueSubmission(executable, future));
+    return future;
   }
 }

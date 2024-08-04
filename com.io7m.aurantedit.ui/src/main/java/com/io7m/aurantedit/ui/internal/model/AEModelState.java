@@ -392,6 +392,7 @@ public final class AEModelState
     final AUClipDeclaration declaration)
   {
     this.edit(() -> {
+      this.clips.removeIf(existing -> Objects.equals(existing.id(), declaration.id()));
       this.clips.add(declaration);
     });
   }
@@ -438,9 +439,45 @@ public final class AEModelState
     final AUClipID clipId)
   {
     this.edit(() -> {
-      this.clips.removeIf(clip -> clip.id() == clipId);
+      this.clips.removeIf(clip -> Objects.equals(clip.id(), clipId));
       this.clipBuffers.remove(clipId);
       this.clipRawBuffers.remove(clipId);
     });
+  }
+
+  /**
+   * Get the clip declaration with the given ID.
+   *
+   * @param clipId The Id
+   *
+   * @return The clip declaration
+   */
+
+  public AUClipDeclaration clipGet(
+    final AUClipID clipId)
+  {
+    return this.clips.stream()
+      .filter(c -> Objects.equals(c.id(), clipId))
+      .findAny()
+      .orElseThrow(() -> {
+        return new IllegalStateException("Unknown clip: %s".formatted(clipId));
+      });
+  }
+
+  /**
+   * Clear the model state entirely.
+   */
+
+  public void clear()
+  {
+    this.edit(() -> {
+      this.clips.clear();
+      this.clipRawBuffers.clear();
+      this.clipBuffers.clear();
+      this.metas.clear();
+      this.keyAssignments.clear();
+      this.file.set(Optional.empty());
+    });
+    this.setSaved();
   }
 }

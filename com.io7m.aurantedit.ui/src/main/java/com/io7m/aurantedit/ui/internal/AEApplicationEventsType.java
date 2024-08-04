@@ -15,43 +15,29 @@
  */
 
 
-package com.io7m.aurantedit.ui.internal.model;
+package com.io7m.aurantedit.ui.internal;
 
-import javafx.application.Platform;
+import com.io7m.repetoir.core.RPServiceType;
+
+import java.util.concurrent.Flow;
 
 /**
- * Close the file.
- *
- * @param state The model state
+ * The application event service.
  */
 
-public record AEControllerCommandClose(
-  AEModelState state)
-  implements AEControllerCommandType
+public interface AEApplicationEventsType
+  extends RPServiceType
 {
-  @Override
-  public void execute(
-    final AEControllerCommandContextType context)
-  {
-    Platform.runLater(this.state::clear);
-  }
+  /**
+   * @return The events
+   */
 
-  @Override
-  public boolean isUndoable()
-  {
-    return false;
-  }
+  Flow.Publisher<AEApplicationEventType> events();
 
-  @Override
-  public void undo(
-    final AEControllerCommandContextType context)
-  {
+  /**
+   * Publish an event.
+   * @param event The event
+   */
 
-  }
-
-  @Override
-  public String describe()
-  {
-    return "Close file";
-  }
+  void publish(AEApplicationEventType event);
 }

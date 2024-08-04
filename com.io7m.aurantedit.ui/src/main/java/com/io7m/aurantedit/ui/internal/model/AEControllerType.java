@@ -17,6 +17,7 @@
 
 package com.io7m.aurantedit.ui.internal.model;
 
+import com.io7m.aurantedit.ui.internal.AEUnit;
 import com.io7m.aurantium.api.AUClipDeclaration;
 import com.io7m.aurantium.api.AUClipID;
 import com.io7m.aurantium.api.AUIdentifier;
@@ -29,6 +30,7 @@ import javafx.collections.transformation.SortedList;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Flow;
 
 /**
@@ -68,7 +70,8 @@ public interface AEControllerType
    * @return The buffer for the given clip
    */
 
-  SampleBufferType clipBuffer(AUClipID id);
+  SampleBufferType clipBuffer(
+    AUClipID id);
 
   /**
    * @return The identifier
@@ -82,7 +85,8 @@ public interface AEControllerType
    * @param text The metadata filter
    */
 
-  void setMetadataFilter(String text);
+  void setMetadataFilter(
+    String text);
 
   /**
    * Set the clip filter.
@@ -90,7 +94,8 @@ public interface AEControllerType
    * @param text The clip filter
    */
 
-  void setClipFilter(String text);
+  void setClipFilter(
+    String text);
 
   /**
    * @return A property that indicates if there is unsaved data
@@ -102,17 +107,26 @@ public interface AEControllerType
    * Set the current version.
    *
    * @param version The version
+   *
+   * @return The operating in progress
    */
 
-  void setVersion(AUVersion version);
+  CompletableFuture<AEUnit> setVersion(
+    AUVersion version);
 
   /**
    * Set the current name.
    *
    * @param name The name
+   *
+   * @return The operating in progress
    */
 
-  void setName(RDottedName name);
+  CompletableFuture<AEUnit> setName(
+    RDottedName name);
+
+  @Override
+  void close();
 
   /**
    * @return The tip of the current undo stack
@@ -128,30 +142,38 @@ public interface AEControllerType
 
   /**
    * Undo the latest undoable operation.
+   *
+   * @return The operating in progress
    */
 
-  void undo();
+  CompletableFuture<AEUnit> undo();
 
   /**
    * Redo the latest undoable operation.
+   *
+   * @return The operating in progress
    */
 
-  void redo();
+  CompletableFuture<AEUnit> redo();
 
   /**
    * Clear the undo/redo stacks.
+   *
+   * @return The operating in progress
    */
 
-  void clearUndoStack();
+  CompletableFuture<AEUnit> clearUndoStack();
 
   /**
    * Create a new file.
    *
    * @param file       The file
    * @param identifier The identifier
+   *
+   * @return The operating in progress
    */
 
-  void create(
+  CompletableFuture<AEUnit> create(
     Path file,
     AUIdentifier identifier);
 
@@ -159,46 +181,96 @@ public interface AEControllerType
    * Open a file.
    *
    * @param file The file
+   *
+   * @return The operating in progress
    */
 
-  void open(Path file);
+  CompletableFuture<AEUnit> open(
+    Path file);
 
   /**
    * Save the current file.
+   *
+   * @return The operating in progress
    */
 
-  void save();
+  CompletableFuture<AEUnit> save();
 
   /**
    * Save the current file under a new name.
    *
    * @param path The new file
+   *
+   * @return The operating in progress
    */
 
-  void saveAs(Path path);
+  CompletableFuture<AEUnit> saveAs(Path path);
 
   /**
    * Add a metadata value.
    *
    * @param meta The value
+   *
+   * @return The operating in progress
    */
 
-  void metadataAdd(AEMetadata meta);
+  CompletableFuture<AEUnit> metadataAdd(
+    AEMetadata meta);
 
   /**
    * Remove a metadata value.
    *
    * @param meta The value
+   *
+   * @return The operating in progress
    */
 
-  void metadataRemove(AEMetadata meta);
+  CompletableFuture<AEUnit> metadataRemove(
+    AEMetadata meta);
+
+  /**
+   * Replace a metadata value.
+   *
+   * @param meta The value
+   *
+   * @return The operating in progress
+   */
+
+  CompletableFuture<AEUnit> metadataReplace(
+    AEMetadata meta);
 
   /**
    * Add a clip.
    *
    * @param path The path
+   *
+   * @return The operating in progress
    */
 
-  void clipAdd(Path path);
+  CompletableFuture<AEUnit> clipAdd(
+    Path path);
 
+  /**
+   * Replace a clip.
+   *
+   * @param clipID The clip ID
+   * @param path   The path
+   *
+   * @return The operating in progress
+   */
+
+  CompletableFuture<AEUnit> clipReplace(
+    AUClipID clipID,
+    Path path);
+
+  /**
+   * Delete a clip.
+   *
+   * @param clipID The clip ID
+   *
+   * @return The operating in progress
+   */
+
+  CompletableFuture<AEUnit> clipDelete(
+    AUClipID clipID);
 }

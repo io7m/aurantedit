@@ -15,43 +15,59 @@
  */
 
 
-package com.io7m.aurantedit.ui.internal.model;
+package com.io7m.aurantedit.ui.internal;
 
-import javafx.application.Platform;
+import java.util.Objects;
+import java.util.concurrent.Flow;
+import java.util.function.Consumer;
 
 /**
- * Close the file.
+ * A perpetual event subscriber.
  *
- * @param state The model state
+ * @param <T> The type of events
  */
 
-public record AEControllerCommandClose(
-  AEModelState state)
-  implements AEControllerCommandType
+public final class AEPerpetualSubscriber<T> implements Flow.Subscriber<T>
 {
-  @Override
-  public void execute(
-    final AEControllerCommandContextType context)
+  private final Consumer<T> onEvent;
+
+  /**
+   * A perpetual event subscriber.
+   *
+   * @param inOnEvent The event consumer
+   */
+
+  public AEPerpetualSubscriber(
+    final Consumer<T> inOnEvent)
   {
-    Platform.runLater(this.state::clear);
+    this.onEvent =
+      Objects.requireNonNull(inOnEvent, "onEvent");
   }
 
   @Override
-  public boolean isUndoable()
+  public void onSubscribe(
+    final Flow.Subscription subscription)
   {
-    return false;
+    subscription.request(Long.MAX_VALUE);
   }
 
   @Override
-  public void undo(
-    final AEControllerCommandContextType context)
+  public void onNext(
+    final T item)
+  {
+    this.onEvent.accept(Objects.requireNonNull(item, "item"));
+  }
+
+  @Override
+  public void onError(
+    final Throwable throwable)
   {
 
   }
 
   @Override
-  public String describe()
+  public void onComplete()
   {
-    return "Close file";
+
   }
 }

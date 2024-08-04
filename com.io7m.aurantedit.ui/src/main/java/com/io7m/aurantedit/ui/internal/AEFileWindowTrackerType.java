@@ -15,43 +15,39 @@
  */
 
 
-package com.io7m.aurantedit.ui.internal.model;
+package com.io7m.aurantedit.ui.internal;
 
-import javafx.application.Platform;
+import com.io7m.repetoir.core.RPServiceType;
+import javafx.stage.Stage;
 
 /**
- * Close the file.
- *
- * @param state The model state
+ * A window tracker.
  */
 
-public record AEControllerCommandClose(
-  AEModelState state)
-  implements AEControllerCommandType
+public interface AEFileWindowTrackerType
+  extends RPServiceType
 {
-  @Override
-  public void execute(
-    final AEControllerCommandContextType context)
-  {
-    Platform.runLater(this.state::clear);
-  }
+  /**
+   * Register a window.
+   *
+   * @param stage The window
+   */
 
-  @Override
-  public boolean isUndoable()
-  {
-    return false;
-  }
+  void register(
+    Stage stage);
 
-  @Override
-  public void undo(
-    final AEControllerCommandContextType context)
-  {
+  /**
+   * Close and de-register a window.
+   *
+   * @param stage The window
+   */
 
-  }
+  void closeWindow(
+    Stage stage);
 
-  @Override
-  public String describe()
-  {
-    return "Close file";
-  }
+  /**
+   * @return The number of currently open windows
+   */
+
+  int fileWindowsOpen();
 }
