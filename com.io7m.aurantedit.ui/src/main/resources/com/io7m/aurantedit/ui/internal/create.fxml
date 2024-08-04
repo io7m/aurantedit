@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.io7m.aurantedit.ui.internal.AECreateView">
+   <children>
+      <GridPane>
+        <columnConstraints>
+          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="64.0" />
+            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="8.0" />
+          <ColumnConstraints hgrow="SOMETIMES" prefWidth="256.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="128.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="32.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="32.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="%ae.file" />
+            <Button maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" mnemonicParsing="false" onAction="#onFileSetSelected" prefHeight="32.0" text="%ae.set" GridPane.columnIndex="3" />
+            <TextField fx:id="fileField" editable="false" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="32.0" GridPane.columnIndex="2" />
+            <Label text="%ae.identifier" GridPane.rowIndex="1" />
+            <TextField fx:id="idField" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="32.0" GridPane.columnIndex="2" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" />
+         </children>
+      </GridPane>
+      <Region VBox.vgrow="ALWAYS" />
+      <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="32.0" VBox.vgrow="NEVER">
+         <children>
+            <Button fx:id="cancel" cancelButton="true" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#onCancelSelected" prefHeight="32.0" prefWidth="128.0" text="%ae.cancel" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="create" defaultButton="true" disable="true" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#onCreateSelected" prefHeight="32.0" prefWidth="128.0" text="%ae.create" />
+         </children>
+         <VBox.margin>
+            <Insets top="16.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+   </padding>
+</VBox>

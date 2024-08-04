@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.io7m.aurantedit.ui.internal.AEVersionSetView">
+   <children>
+      <GridPane>
+        <columnConstraints>
+          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="128.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="8.0" />
+          <ColumnConstraints hgrow="SOMETIMES" prefWidth="256.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="32.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="32.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="%ae.version_major" />
+            <Spinner fx:id="versionMajor" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="32.0" GridPane.columnIndex="2" />
+            <Label text="%ae.version_minor" GridPane.rowIndex="1" />
+            <Spinner fx:id="versionMinor" layoutX="138.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="32.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+         </children>
+      </GridPane>
+      <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="32.0">
+         <children>
+            <Button cancelButton="true" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#onCancelSelected" prefHeight="32.0" prefWidth="128.0" text="%ae.cancel" />
+            <Region prefHeight="200.0" prefWidth="200.0" />
+            <Button defaultButton="true" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" minHeight="-Infinity" mnemonicParsing="false" onAction="#onUpdateSelected" prefHeight="32.0" prefWidth="128.0" text="%ae.update" />
+         </children>
+         <VBox.margin>
+            <Insets top="16.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+   </padding>
+</VBox>

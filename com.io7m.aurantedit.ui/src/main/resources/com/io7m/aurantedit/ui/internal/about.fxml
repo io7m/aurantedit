@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.io7m.aurantedit.ui.internal.AEAboutView">
+   <children>
+      <GridPane alignment="CENTER" styleClass="borderedHeavyOutset">
+        <columnConstraints>
+          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="128.0" />
+          <ColumnConstraints maxWidth="-Infinity" minWidth="-Infinity" prefWidth="384.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="128.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="32.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="32.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="32.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <ImageView fitHeight="128.0" fitWidth="128.0" pickOnBounds="true" preserveRatio="true" styleClass="borderedHeavyOutset">
+               <image>
+                  <Image url="@icon128.png" />
+               </image>
+            </ImageView>
+            <Label alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="borderedHeavyOutset" text="Aurantedit" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+               <font>
+                  <Font size="36.0" />
+               </font>
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+               <padding>
+                  <Insets bottom="8.0" left="16.0" right="8.0" top="8.0" />
+               </padding>
+            </Label>
+            <Label alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="borderedHeavyOutset" text="%ae.about.site.title" GridPane.rowIndex="1">
+               <padding>
+                  <Insets right="8.0" />
+               </padding>
+            </Label>
+            <TextField editable="false" maxHeight="1.7976931348623157E308" styleClass="borderedHeavyOutset" text="%ae.about.site" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <font>
+                  <Font name="Monospaced Regular" size="13.0" />
+               </font>
+            </TextField>
+            <Label alignment="CENTER_RIGHT" layoutX="10.0" layoutY="50.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="borderedHeavyOutset" text="%ae.about.version" GridPane.rowIndex="2">
+               <padding>
+                  <Insets right="8.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="version" editable="false" layoutX="146.0" layoutY="42.0" maxHeight="1.7976931348623157E308" styleClass="borderedHeavyOutset" GridPane.columnIndex="1" GridPane.rowIndex="2">
+              <font>
+                <Font name="Monospaced Regular" size="13.0" />
+              </font>
+            </TextField>
+            <Label alignment="CENTER_RIGHT" layoutX="10.0" layoutY="82.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="borderedHeavyOutset" text="%ae.about.commit" GridPane.rowIndex="3">
+               <padding>
+                  <Insets right="8.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="build" editable="false" layoutX="146.0" layoutY="74.0" maxHeight="1.7976931348623157E308" styleClass="borderedHeavyOutset" GridPane.columnIndex="1" GridPane.rowIndex="3">
+              <font>
+                <Font name="Monospaced Regular" size="13.0" />
+              </font>
+            </TextField>
+         </children>
+      </GridPane>
+   </children>
+   <padding>
+      <Insets bottom="32.0" left="32.0" right="32.0" top="32.0" />
+   </padding>
+</VBox>

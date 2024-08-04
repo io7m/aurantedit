@@ -1,0 +1,250 @@
+.root
+{
+  -fx-font-size: 10pt;
+  -fx-font-family: "Sans";
+
+  -fx-base:              #eeeeee;
+  -fx-accent:            #0000aa;
+  -fx-default-button:    #0000aa;
+  -fx-focus-color:       #0000aa;
+  -fx-faint-focus-color: #0000aa22;
+}
+
+.progress-bar > .track
+{
+  -fx-background-insets: 0 0 0 0;
+  -fx-background-radius: 0 0 0 0;
+  -fx-border-insets: 0 0 0 0;
+  -fx-padding: 0 0 0 0;
+}
+
+.progress-bar > .bar
+{
+  -fx-background-insets: 0 0 0 0;
+  -fx-background-radius: 0 0 0 0;
+  -fx-border-insets: 0 0 0 0;
+  -fx-padding: 0 0 0 0;
+
+  -fx-background-color: #0000aa;
+}
+
+.progress-bar
+{
+  -fx-border-color: #000000;
+}
+
+.button,
+.check-box,
+.choice-box,
+.color-picker,
+.color-picker.split-button,
+.combo-box-base,
+.container,
+.control-buttons-tab,
+.menu-button,
+.progress-bar,
+.radio-button,
+.text-field,
+.text-area,
+.tab,
+.tab-down-button,
+.tab-header-area,
+.tab-pane,
+.toggle-button
+{
+  -fx-background-radius: 0 0 0 0;
+  -fx-border-radius: 0 0 0 0;
+}
+
+.tab .tab-label
+{
+  -fx-pref-width: 160;
+  -fx-alignment: center;
+}
+
+.tab:selected .tab-label
+{
+  -fx-alignment: center;
+}
+
+.tab-pane
+{
+  -fx-tab-min-height: 32;
+  -fx-tab-max-height: 32;
+}
+
+.table-column
+{
+
+}
+
+/*
+ * Table cell CSS controls the vertical lines in the table. In practical terms,
+ * only the left border color is useful.
+ */
+
+.table-cell
+{
+  -fx-border-insets:     0 0 0 0;
+  -fx-border-color:      #ffffff00 #aaaaaaff #ffffff00 #ffffff00;
+  -fx-padding:           4px;
+}
+
+.table-cell:even
+{
+  -fx-background-color:  #00000000;
+  -fx-background-insets: 0;
+}
+
+.table-cell:odd
+{
+  -fx-background-color:  #0000aa10;
+  -fx-background-insets: 0;
+}
+
+.table-cell:selected
+{
+  -fx-background-color:  #0000aaff;
+}
+
+/*
+ * Table row cell CSS controls the horizontal lines in the table.
+ */
+
+.table-row-cell:even
+{
+  -fx-border-insets:     0 0 0 0;
+  -fx-border-color:      #ffffff00 #ffffff00 #aaaaaaff #ffffff00;
+  -fx-padding:           0px;
+}
+
+.table-row-cell:odd
+{
+  -fx-border-insets:     0 0 0 0;
+  -fx-border-color:      #ffffff00 #ffffff00 #aaaaaaff #ffffff00;
+  -fx-padding:           0px;
+}
+
+.tabButton
+{
+  -fx-font-size: 8pt;
+}
+
+.accordion .titled-pane .title
+{
+  -fx-pref-height: 33;
+  -fx-alignment: center;
+}
+
+.accordion .titled-pane .title .text
+{
+  -fx-translate-y: -3;
+}
+
+.errorHighlight
+{
+  -fx-background-color: #ffbbbb;
+}
+
+.dataField
+{
+  -fx-font-size: 9pt;
+  -fx-font-family: "Monospaced";
+}
+
+.noHeader .column-header-background
+{
+  -fx-max-height: 0;
+  -fx-pref-height: 0;
+  -fx-min-height: 0;
+}
+
+.metadataTreeItem
+{
+
+}
+
+.stockTableTextField
+{
+  -fx-background-color: transparent;
+  -fx-background-insets: 0px;
+}
+
+.borderedOutset
+{
+  -fx-border-color: #aaaaaa;
+  -fx-border-insets: 0;
+  -fx-border-width:  0.25;
+}
+
+.borderedHeavyOutset
+{
+  -fx-border-color: #999999;
+  -fx-border-insets: 0;
+  -fx-border-width:  1;
+}
+
+/*
+ * Miscue error CSS.
+ */
+
+.errorTitle
+{
+ -fx-font-weight: bold;
+}
+
+.errorIcon
+{
+
+}
+
+.errorDetailsText
+{
+ -fx-font-size:   10pt;
+ -fx-font-family: "Monospaced";
+}
+
+.errorExceptionTitle
+{
+ -fx-font-weight: bold;
+}
+
+.errorExceptionText
+{
+ -fx-font-size:   10pt;
+ -fx-font-family: "Monospaced";
+}
+
+.errorSolutionsTitle
+{
+ -fx-font-weight: bold;
+}
+
+.errorSolutionsText
+{
+ -fx-font-size:   10pt;
+ -fx-font-family: "Monospaced";
+}
+
+.errorAttributeTable
+{
+ -fx-font-size:   10pt;
+ -fx-font-family: "Monospaced";
+}
+
+.errorAttributeTable .column-header-background
+{
+ -fx-max-height: 0;
+ -fx-pref-height: 0;
+ -fx-min-height: 0;
+}
+
+.errorDismissButton
+{
+
+}
+
+.errorReportButton
+{
+
+}

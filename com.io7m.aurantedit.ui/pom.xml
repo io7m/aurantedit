@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.io7m.aurantedit</groupId>
+    <artifactId>com.io7m.aurantedit</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>com.io7m.aurantedit.ui</artifactId>
+
+  <packaging>jar</packaging>
+  <name>com.io7m.aurantedit.ui</name>
+  <description>Aurantium file editor (UI)</description>
+  <url>https://www.io7m.com/software/aurantium/</url>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.io7m.seltzer</groupId>
+      <artifactId>com.io7m.seltzer.api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jade</groupId>
+      <artifactId>com.io7m.jade.api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jaffirm</groupId>
+      <artifactId>com.io7m.jaffirm.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jxtrand</groupId>
+      <artifactId>com.io7m.jxtrand.api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jxtrand</groupId>
+      <artifactId>com.io7m.jxtrand.vanilla</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.repetoir</groupId>
+      <artifactId>com.io7m.repetoir.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.lanark</groupId>
+      <artifactId>com.io7m.lanark.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jmulticlose</groupId>
+      <artifactId>com.io7m.jmulticlose.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jranges</groupId>
+      <artifactId>com.io7m.jranges.core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-graphics</artifactId>
+    </dependency>
+
+    <!-- Error dialogs. -->
+    <dependency>
+      <groupId>com.io7m.miscue</groupId>
+      <artifactId>com.io7m.miscue.fx.seltzer</artifactId>
+    </dependency>
+
+    <!-- File open dialogs. -->
+    <dependency>
+      <groupId>com.io7m.jwheatsheaf</groupId>
+      <artifactId>com.io7m.jwheatsheaf.ui</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jwheatsheaf</groupId>
+      <artifactId>com.io7m.jwheatsheaf.api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jwheatsheaf</groupId>
+      <artifactId>com.io7m.jwheatsheaf.oxygen</artifactId>
+    </dependency>
+
+    <!-- Aurantium. -->
+    <dependency>
+      <groupId>com.io7m.aurantium</groupId>
+      <artifactId>com.io7m.aurantium.api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.aurantium</groupId>
+      <artifactId>com.io7m.aurantium.vanilla</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.aurantium</groupId>
+      <artifactId>com.io7m.aurantium.parser.api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.aurantium</groupId>
+      <artifactId>com.io7m.aurantium.writer.api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jbssio</groupId>
+      <artifactId>com.io7m.jbssio.vanilla</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jsamplebuffer</groupId>
+      <artifactId>com.io7m.jsamplebuffer.api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jsamplebuffer</groupId>
+      <artifactId>com.io7m.jsamplebuffer.vanilla</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.jsamplebuffer</groupId>
+      <artifactId>com.io7m.jsamplebuffer.xmedia</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.brackish</groupId>
+      <artifactId>com.io7m.brackish.core</artifactId>
+    </dependency>
+
+    <!-- Telemetry. -->
+    <dependency>
+      <groupId>io.opentelemetry</groupId>
+      <artifactId>opentelemetry-api</artifactId>
+    </dependency>
+
+    <!-- Database. -->
+    <dependency>
+      <groupId>org.jooq</groupId>
+      <artifactId>jooq</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.xerial</groupId>
+      <artifactId>sqlite-jdbc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.darco</groupId>
+      <artifactId>com.io7m.darco.api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.io7m.darco</groupId>
+      <artifactId>com.io7m.darco.sqlite</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.annotation.bundle</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.annotation.versioning</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+      </resource>
+      <resource>
+        <directory>src/main/resources-filtered</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+
+    <plugins>
+      <!-- Ignore dependencies that bytecode analysis gets wrong. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <configuration>
+          <failOnWarning>true</failOnWarning>
+          <ignoredUnusedDeclaredDependencies>
+            <ignoredUnusedDeclaredDependency>
+              org.openjfx:*
+            </ignoredUnusedDeclaredDependency>
+            <ignoredUnusedDeclaredDependency>
+              com.io7m.jxtrand:*
+            </ignoredUnusedDeclaredDependency>
+            <ignoredUnusedDeclaredDependency>
+              com.io7m.aurantium:*
+            </ignoredUnusedDeclaredDependency>
+            <ignoredUnusedDeclaredDependency>
+              com.io7m.jbssio:*
+            </ignoredUnusedDeclaredDependency>
+            <ignoredUnusedDeclaredDependency>
+              ch.qos.logback:logback-classic:*
+            </ignoredUnusedDeclaredDependency>
+            <ignoredUnusedDeclaredDependency>
+              org.apache.tika:tika-parser-image-module:*
+            </ignoredUnusedDeclaredDependency>
+          </ignoredUnusedDeclaredDependencies>
+          <ignoredUsedUndeclaredDependencies>
+            <ignoredUsedUndeclaredDependency>
+              org.openjfx:*
+            </ignoredUsedUndeclaredDependency>
+          </ignoredUsedUndeclaredDependencies>
+        </configuration>
+      </plugin>
+
+      <!-- Generate SQL file -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+
+        <dependencies>
+          <dependency>
+            <groupId>com.io7m.trasco</groupId>
+            <artifactId>com.io7m.trasco.api</artifactId>
+            <version>${com.io7m.trasco.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>com.io7m.trasco</groupId>
+            <artifactId>com.io7m.trasco.vanilla</artifactId>
+            <version>${com.io7m.trasco.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>com.io7m.trasco</groupId>
+            <artifactId>com.io7m.trasco.xml.schemas</artifactId>
+            <version>${com.io7m.trasco.version}</version>
+          </dependency>
+        </dependencies>
+
+        <executions>
+          <execution>
+            <id>generate-sql</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>java</goal>
+            </goals>
+            <configuration>
+              <mainClass>com.io7m.trasco.vanilla.TrSchemaRevisionSetSQLMain</mainClass>
+              <includePluginDependencies>true</includePluginDependencies>
+              <includeProjectDependencies>false</includeProjectDependencies>
+              <arguments>
+                <argument>${project.basedir}/src/main/resources/com/io7m/aurantedit/ui/internal/database.xml</argument>
+                <argument>${project.build.directory}/database.sql</argument>
+                <argument>ROLES</argument>
+                <argument>GRANTS</argument>
+                <argument>FUNCTIONS</argument>
+                <argument>TRIGGERS</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Generate jooq sources. -->
+      <plugin>
+        <groupId>org.jooq</groupId>
+        <artifactId>jooq-codegen-maven</artifactId>
+        <version>${org.jooq.version}</version>
+        <configuration>
+          <configurationFile>src/main/jooq/configuration.xml</configurationFile>
+        </configuration>
+        <executions>
+          <execution>
+            <id>jooq-codegen</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-meta-extensions</artifactId>
+            <version>${org.jooq.version}</version>
+          </dependency>
+          <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq-postgres-extensions</artifactId>
+            <version>${org.jooq.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+      <!-- Add jooq sources. -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-jooq-sources</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${project.build.directory}/generated-sources/jooq</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Generate strings. -->
+      <plugin>
+        <groupId>com.io7m.jxtrand</groupId>
+        <artifactId>com.io7m.jxtrand.maven_plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-strings</id>
+            <goals>
+              <goal>generateSources</goal>
+            </goals>
+            <configuration>
+              <inputFile>
+                ${project.basedir}/src/main/resources/com/io7m/aurantedit/ui/internal/Strings.properties
+              </inputFile>
+              <packageName>com.io7m.aurantedit.ui.internal</packageName>
+              <className>AEStringConstants</className>
+              <extraSuperInterface>com.io7m.aurantedit.ui.internal.AEStringConstantType</extraSuperInterface>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
