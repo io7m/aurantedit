@@ -52,6 +52,9 @@ public final class AEControllerCommandMetadataAdd
   public void execute(
     final AEControllerCommandContextType context)
   {
+    context.putAttribute("Metadata (Name)", this.meta.name());
+    context.putAttribute("Metadata (Value)", this.meta.value());
+
     Platform.runLater(() -> {
       this.state.metadataAdd(this.meta);
     });
@@ -67,6 +70,9 @@ public final class AEControllerCommandMetadataAdd
   public void undo(
     final AEControllerCommandContextType context)
   {
+    context.putAttribute("Metadata (Name)", this.meta.name());
+    context.putAttribute("Metadata (Value)", this.meta.value());
+
     Platform.runLater(() -> {
       this.state.metadataRemove(this.meta);
     });

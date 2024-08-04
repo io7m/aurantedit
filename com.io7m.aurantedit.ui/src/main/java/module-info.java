@@ -55,6 +55,7 @@ open module com.io7m.aurantedit.ui
   requires javafx.controls;
   requires javafx.fxml;
   requires javafx.graphics;
+  requires javasound.flac;
   requires org.jooq;
   requires org.slf4j;
   requires org.xerial.sqlitejdbc;

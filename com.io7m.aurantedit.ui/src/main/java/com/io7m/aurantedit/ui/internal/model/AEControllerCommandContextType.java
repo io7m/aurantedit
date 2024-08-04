@@ -24,6 +24,17 @@ package com.io7m.aurantedit.ui.internal.model;
 public interface AEControllerCommandContextType
 {
   /**
+   * Set an attribute for error reporting.
+   *
+   * @param name  The name
+   * @param value The value
+   */
+
+  void putAttribute(
+    String name,
+    Object value);
+
+  /**
    * An operation is in progress.
    *
    * @param message  The message

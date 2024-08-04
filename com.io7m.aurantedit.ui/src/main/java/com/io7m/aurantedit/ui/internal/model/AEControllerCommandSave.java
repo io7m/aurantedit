@@ -68,6 +68,9 @@ public record AEControllerCommandSave(
     final AEControllerCommandContextType context)
     throws Exception
   {
+    context.putAttribute("File", this.outputFile);
+    context.putAttribute("File (Temporary)", this.outputFileTemp);
+
     context.eventInProgress("Saving file...", 0.0);
 
     final var writersOpt =

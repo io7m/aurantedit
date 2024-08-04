@@ -43,6 +43,10 @@ public record AEControllerCommandCreate(
   public void execute(
     final AEControllerCommandContextType context)
   {
+    context.putAttribute("File", this.file);
+    context.putAttribute("Name", this.identifier.name());
+    context.putAttribute("Version", this.identifier.version());
+
     Platform.runLater(() -> {
       this.state.setFile(this.file);
       this.state.setMeta(List.of());
@@ -62,7 +66,9 @@ public record AEControllerCommandCreate(
   public void undo(
     final AEControllerCommandContextType context)
   {
-
+    context.putAttribute("File", this.file);
+    context.putAttribute("Name", this.identifier.name());
+    context.putAttribute("Version", this.identifier.version());
   }
 
   @Override

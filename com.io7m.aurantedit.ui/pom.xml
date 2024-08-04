@@ -57,6 +57,11 @@
     </dependency>
 
     <dependency>
+      <groupId>com.tianscar.javasound</groupId>
+      <artifactId>javasound-flac</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-base</artifactId>
     </dependency>
@@ -209,6 +214,9 @@
             </ignoredUnusedDeclaredDependency>
             <ignoredUnusedDeclaredDependency>
               org.apache.tika:tika-parser-image-module:*
+            </ignoredUnusedDeclaredDependency>
+            <ignoredUnusedDeclaredDependency>
+              com.tianscar.javasound:javasound-flac:*
             </ignoredUnusedDeclaredDependency>
           </ignoredUnusedDeclaredDependencies>
           <ignoredUsedUndeclaredDependencies>

@@ -56,6 +56,8 @@ public final class AEControllerCommandSetVersion
   public void execute(
     final AEControllerCommandContextType context)
   {
+    context.putAttribute("Version", this.newVersion);
+
     Platform.runLater(() -> {
       this.oldIdentifier =
         this.state.identifier()

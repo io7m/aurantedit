@@ -192,4 +192,13 @@ public interface AEControllerType
    */
 
   void metadataRemove(AEMetadata meta);
+
+  /**
+   * Add a clip.
+   *
+   * @param path The path
+   */
+
+  void clipAdd(Path path);
+
 }

@@ -56,6 +56,8 @@ public final class AEControllerCommandSetName
   public void execute(
     final AEControllerCommandContextType context)
   {
+    context.putAttribute("Name", this.newName);
+
     Platform.runLater(() -> {
       this.oldIdentifier =
         this.state.identifier()

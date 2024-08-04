@@ -368,4 +368,79 @@ public final class AEModelState
       this.metas.remove(meta);
     });
   }
+
+  /**
+   * @return A fresh clip ID
+   */
+
+  public AUClipID clipFreshID()
+  {
+    return this.clips.stream()
+      .map(AUClipDeclaration::id)
+      .max(AUClipID::compareTo)
+      .map(c -> new AUClipID(c.value() + 1L))
+      .orElse(new AUClipID(0L));
+  }
+
+  /**
+   * Add a clip.
+   *
+   * @param declaration The clip
+   */
+
+  public void clipAdd(
+    final AUClipDeclaration declaration)
+  {
+    this.edit(() -> {
+      this.clips.add(declaration);
+    });
+  }
+
+  /**
+   * Add a clip buffer.
+   *
+   * @param clipId       The clip ID
+   * @param sampleBuffer The buffer
+   */
+
+  public void clipBufferPut(
+    final AUClipID clipId,
+    final SampleBufferType sampleBuffer)
+  {
+    this.edit(() -> {
+      this.clipBuffers.put(clipId, sampleBuffer);
+    });
+  }
+
+  /**
+   * Add a clip buffer.
+   *
+   * @param clipId The clip ID
+   * @param buffer The buffer
+   */
+
+  public void clipRawBufferPut(
+    final AUClipID clipId,
+    final ByteBuffer buffer)
+  {
+    this.edit(() -> {
+      this.clipRawBuffers.put(clipId, buffer);
+    });
+  }
+
+  /**
+   * Delete a clip.
+   *
+   * @param clipId The clip ID
+   */
+
+  public void clipDelete(
+    final AUClipID clipId)
+  {
+    this.edit(() -> {
+      this.clips.removeIf(clip -> clip.id() == clipId);
+      this.clipBuffers.remove(clipId);
+      this.clipRawBuffers.remove(clipId);
+    });
+  }
 }

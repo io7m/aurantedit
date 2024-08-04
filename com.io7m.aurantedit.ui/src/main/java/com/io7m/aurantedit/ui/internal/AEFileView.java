@@ -688,7 +688,19 @@ public final class AEFileView implements AEViewType,
   @FXML
   private void onClipAddSelected()
   {
+    final var chooser =
+      this.choosers.create(
+        JWFileChooserConfiguration.builder()
+          .setAction(JWFileChooserAction.OPEN_EXISTING_SINGLE)
+          .build()
+      );
 
+    final var chosen = chooser.showAndWait();
+    if (chosen.isEmpty()) {
+      return;
+    }
+
+    this.controller.clipAdd(chosen.get(0));
   }
 
   @FXML

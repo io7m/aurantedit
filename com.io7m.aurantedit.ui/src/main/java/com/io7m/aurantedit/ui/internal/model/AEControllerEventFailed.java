@@ -20,6 +20,7 @@ package com.io7m.aurantedit.ui.internal.model;
 import com.io7m.seltzer.api.SStructuredError;
 import com.io7m.seltzer.api.SStructuredErrorType;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -48,20 +49,25 @@ public record AEControllerEventFailed(
   /**
    * Convert an exception into a failure event.
    *
-   * @param e The exception
+   * @param e              The exception
+   * @param baseAttributes The attributes
    *
    * @return An event based on the given exception
    */
 
   public static AEControllerEventFailed ofException(
-    final Exception e)
+    final Map<String, String> baseAttributes,
+    final Throwable e)
   {
+    final var attributes = new HashMap<>(baseAttributes);
     if (e instanceof final SStructuredErrorType<?> error) {
+      attributes.putAll(error.attributes());
+
       return new AEControllerEventFailed(
         new SStructuredError<>(
           error.errorCode().toString(),
           error.message(),
-          error.attributes(),
+          Map.copyOf(attributes),
           error.remediatingAction(),
           error.exception()
         )
@@ -72,7 +78,7 @@ public record AEControllerEventFailed(
       new SStructuredError<>(
         "error-exception",
         Objects.requireNonNullElse(e.getMessage(), e.getClass().getName()),
-        Map.of(),
+        Map.copyOf(attributes),
         Optional.empty(),
         Optional.of(e)
       )

@@ -37,9 +37,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Flow;
@@ -75,6 +77,7 @@ public final class AEController
   private final SimpleObjectProperty<Optional<String>> redoState;
   private final SubmissionPublisher<AEControllerEventType> events;
   private final CloseableCollectionType<IllegalStateException> resources;
+  private final ConcurrentHashMap<String, String> attributes;
 
   private AEController(
     final AEStringsType inStrings)
@@ -84,6 +87,8 @@ public final class AEController
 
     this.events =
       new SubmissionPublisher<>();
+    this.attributes =
+      new ConcurrentHashMap<>();
 
     this.state =
       new AEModelState();
@@ -161,6 +166,8 @@ public final class AEController
         final var executable =
           this.executorCommandQueue.poll(1L, TimeUnit.SECONDS);
 
+        this.attributes.clear();
+
         switch (executable) {
           case final AEControllerCommandType command -> {
             try {
@@ -170,9 +177,14 @@ public final class AEController
                 this.undoStack.add(command);
               }
               this.events.submit(this.eventCommandSucceeded(command));
-            } catch (final Exception e) {
+            } catch (final Throwable e) {
               LOG.error("Error: ", e);
-              this.events.submit(AEControllerEventFailed.ofException(e));
+              this.events.submit(
+                AEControllerEventFailed.ofException(
+                  Map.copyOf(this.attributes),
+                  e
+                )
+              );
             }
           }
 
@@ -187,7 +199,12 @@ public final class AEController
               this.events.submit(this.eventCommandSucceeded(command));
             } catch (final Exception e) {
               LOG.error("Error: ", e);
-              this.events.submit(AEControllerEventFailed.ofException(e));
+              this.events.submit(
+                AEControllerEventFailed.ofException(
+                  Map.copyOf(this.attributes),
+                  e
+                )
+              );
             }
           }
 
@@ -202,7 +219,12 @@ public final class AEController
               this.events.submit(this.eventCommandSucceeded(command));
             } catch (final Exception e) {
               LOG.error("Error: ", e);
-              this.events.submit(AEControllerEventFailed.ofException(e));
+              this.events.submit(
+                AEControllerEventFailed.ofException(
+                  Map.copyOf(this.attributes),
+                  e
+                )
+              );
             }
           }
 
@@ -212,7 +234,12 @@ public final class AEController
               this.redoStack.clear();
             } catch (final Exception e) {
               LOG.error("Error: ", e);
-              this.events.submit(AEControllerEventFailed.ofException(e));
+              this.events.submit(
+                AEControllerEventFailed.ofException(
+                  Map.copyOf(this.attributes),
+                  e
+                )
+              );
             }
           }
           case null -> {
@@ -438,6 +465,28 @@ public final class AEController
     this.executorCommandQueue.add(
       new AEControllerCommandMetadataRemove(this.state, meta)
     );
+  }
+
+  @Override
+  public void clipAdd(
+    final Path path)
+  {
+    Objects.requireNonNull(path, "path");
+
+    this.executorCommandQueue.add(
+      new AEControllerCommandClipAdd(this.state, path)
+    );
+  }
+
+  @Override
+  public void putAttribute(
+    final String name,
+    final Object value)
+  {
+    Objects.requireNonNull(name, "name");
+    Objects.requireNonNull(value, "value");
+
+    this.attributes.put(name, value.toString());
   }
 
   @Override

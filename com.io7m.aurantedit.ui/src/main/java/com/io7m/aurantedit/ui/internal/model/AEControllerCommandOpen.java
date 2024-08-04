@@ -76,6 +76,7 @@ public record AEControllerCommandOpen(
     final AEControllerCommandContextType context)
     throws Exception
   {
+    context.putAttribute("File", this.file);
     context.eventInProgress("Opening file...", 0.0);
 
     try (var channel =
