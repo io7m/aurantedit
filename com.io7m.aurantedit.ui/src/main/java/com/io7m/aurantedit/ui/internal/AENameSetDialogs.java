@@ -74,4 +74,14 @@ public final class AENameSetDialogs
   {
     return "Name set dialog service.";
   }
+
+  @Override
+  public String toString()
+  {
+    return String.format(
+      "[%s 0x%08x]",
+      this.getClass().getName(),
+      Integer.valueOf(this.hashCode())
+    );
+  }
 }

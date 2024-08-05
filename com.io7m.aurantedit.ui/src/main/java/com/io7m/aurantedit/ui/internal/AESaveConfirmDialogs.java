@@ -75,4 +75,14 @@ public final class AESaveConfirmDialogs
   {
     return "Save confirmation dialog service.";
   }
+
+  @Override
+  public String toString()
+  {
+    return String.format(
+      "[%s 0x%08x]",
+      this.getClass().getName(),
+      Integer.valueOf(this.hashCode())
+    );
+  }
 }

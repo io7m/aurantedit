@@ -128,7 +128,8 @@ public final class AEFileChoosers implements AEFileChoosersType
   public String toString()
   {
     return String.format(
-      "[AEFileChoosers 0x%08x]",
+      "[%s 0x%08x]",
+      this.getClass().getName(),
       Integer.valueOf(this.hashCode())
     );
   }

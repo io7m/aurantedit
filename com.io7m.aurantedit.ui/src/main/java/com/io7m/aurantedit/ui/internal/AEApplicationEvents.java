@@ -61,4 +61,14 @@ public final class AEApplicationEvents implements AEApplicationEventsType
   {
     return "Application event service.";
   }
+
+  @Override
+  public String toString()
+  {
+    return String.format(
+      "[%s 0x%08x]",
+      this.getClass().getName(),
+      Integer.valueOf(this.hashCode())
+    );
+  }
 }
