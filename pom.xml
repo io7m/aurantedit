@@ -61,7 +61,7 @@
     <net.jqwik.version>1.9.0</net.jqwik.version>
     <org.javafx.version>23-ea+22</org.javafx.version>
     <org.jooq.version>3.19.11</org.jooq.version>
-    <org.junit.version>5.10.3</org.junit.version>
+    <org.junit.version>5.11.0</org.junit.version>
     <org.slf4j.version>2.0.16</org.slf4j.version>
     <org.xerial.sqlite.version>3.46.0.1</org.xerial.sqlite.version>
   </properties>
