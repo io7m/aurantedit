@@ -55,7 +55,7 @@
     <com.io7m.xstructural.version>1.8.1</com.io7m.xstructural.version>
 
     <!-- Third-party dependencies. -->
-    <ch.qos.logback.version>1.5.6</ch.qos.logback.version>
+    <ch.qos.logback.version>1.5.8</ch.qos.logback.version>
     <com.tianscar.javasound.flac.version>1.4.1</com.tianscar.javasound.flac.version>
     <io.opentelemetry.version>1.41.0</io.opentelemetry.version>
     <net.jqwik.version>1.9.0</net.jqwik.version>
