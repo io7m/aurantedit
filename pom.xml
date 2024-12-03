@@ -33,7 +33,7 @@
     <!-- io7m dependencies. -->
     <com.io7m.aurantium.version>0.0.2-SNAPSHOT</com.io7m.aurantium.version>
     <com.io7m.brackish.version>0.0.1</com.io7m.brackish.version>
-    <com.io7m.darco.version>1.0.0</com.io7m.darco.version>
+    <com.io7m.darco.version>2.0.0</com.io7m.darco.version>
     <com.io7m.jade.version>1.0.3</com.io7m.jade.version>
     <com.io7m.jaffirm.version>4.0.1</com.io7m.jaffirm.version>
     <com.io7m.jattribute.version>1.0.1</com.io7m.jattribute.version>
